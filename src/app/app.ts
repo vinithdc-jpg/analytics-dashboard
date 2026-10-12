@@ -1,12 +1,22 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component } from '@angular/core';
+import { Sidebar } from './layout/sidebar/sidebar';
+import { Topbar } from './layout/topbar/topbar';
+import { DashboardContent } from './dashboard/dashboard-content/dashboard-content';
 
 @Component({
-  imports: [RouterOutlet],
   selector: 'app-root',
-  styleUrl: './app.css',
+  standalone: true,
+  imports: [Sidebar, Topbar, DashboardContent],
   templateUrl: './app.html',
 })
 export class App {
-  protected readonly title = signal('analytics-dashboard');
+  sidebarOpen = false;
+
+  toggleSidebar() {
+    this.sidebarOpen = !this.sidebarOpen;
+  }
+
+  closeSidebar() {
+    this.sidebarOpen = false;
+  }
 }

@@ -1,0 +1,54 @@
+<header
+  class="flex h-20 items-center justify-between gap-4 border-b border-slate-200 bg-white px-4 sm:px-6 lg:px-8"
+>
+  <div class="flex min-w-0 items-center gap-3">
+    <button
+      type="button"
+      (click)="menuToggle.emit()"
+      aria-label="Toggle navigation menu"
+      class="rounded-lg p-2 text-slate-600 hover:bg-slate-100 lg:hidden"
+    >
+      ☰
+    </button>
+
+    <div class="min-w-0">
+      <h2 class="truncate text-lg font-bold text-slate-900 sm:text-xl">Dashboard Overview</h2>
+      <p class="hidden text-sm text-slate-500 sm:block">
+        Welcome back! Here's what's happening today.
+      </p>
+    </div>
+  </div>
+
+  <div class="flex shrink-0 items-center gap-3 sm:gap-5">
+    <label class="hidden items-center gap-2 rounded-xl bg-slate-100 px-3 py-2 md:flex">
+      <span class="text-slate-400">⌕</span>
+      <input
+        type="search"
+        placeholder="Search..."
+        aria-label="Search dashboard"
+        class="w-28 bg-transparent text-sm outline-none placeholder:text-slate-400 lg:w-40"
+      />
+    </label>
+
+    <button
+      type="button"
+      aria-label="Notifications"
+      class="relative rounded-xl p-2 text-xl text-slate-600 hover:bg-slate-100"
+    >
+      ♧
+      <span class="absolute right-1 top-1 h-2 w-2 rounded-full bg-violet-600"></span>
+    </button>
+
+    <div class="flex items-center gap-2">
+      <div
+        class="flex h-10 w-10 items-center justify-center rounded-full bg-violet-100 font-bold text-violet-700"
+      >
+        A
+      </div>
+      <div class="hidden sm:block">
+        <p class="text-sm font-semibold text-slate-800">Admin User</p>
+        <p class="text-xs text-slate-500">Administrator</p>
+      </div>
+    </div>
+  </div>
+</header>
