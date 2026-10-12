@@ -31,24 +31,43 @@
     </label>
 
     <div class="flex items-center gap-2">
-
       <div class="flex items-center gap-3">
+      
         <div class="hidden sm:block">
-          <label for="demoRole" class="mb-1 block text-xs font-medium text-slate-500">
-            Demo role
-          </label>
-
           <div class="relative w-40">
+            <!-- Floating label -->
+            <label
+              for="demoRole"
+              class="absolute -top-2 left-3 z-10 bg-white px-1 text-xs font-medium text-slate-500"
+            >
+              Demo role
+            </label>
+
             <!-- Dropdown trigger -->
             <button
+              id="demoRole"
               type="button"
               (click)="isDemoRoleOpen = !isDemoRoleOpen"
-              class="flex w-full items-center justify-between rounded-lg border border-slate-200 bg-white px-3 py-2 text-left text-sm font-medium text-slate-700 shadow-sm transition hover:border-violet-400 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-100"
+              class="flex w-full items-center justify-between rounded-lg border border-slate-200 bg-white px-3 py-3 text-left text-sm font-medium text-slate-700 shadow-sm transition hover:border-violet-400 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-100"
               [attr.aria-expanded]="isDemoRoleOpen"
               aria-haspopup="listbox"
             >
               <span>{{ role() }}</span>
 
+              <svg
+                class="h-4 w-4 transition-transform"
+                [class.rotate-180]="isDemoRoleOpen"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="m6 9 6 6 6-6"
+                />
+              </svg>
             </button>
 
             <!-- Custom options -->
@@ -79,6 +98,7 @@
             }
           </div>
         </div>
+        
 
         <div
           class="flex h-10 w-10 items-center justify-center rounded-full bg-violet-100 font-bold text-violet-700"
