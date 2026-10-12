@@ -13,6 +13,7 @@ type Period = 'week' | 'month' | 'year';
   imports: [BaseChartDirective],
   templateUrl: './activity-chart.html',
 })
+
 export class ActivityChart implements OnChanges {
   @Input() period: Period = 'month';
 

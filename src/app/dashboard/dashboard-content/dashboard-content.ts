@@ -1,11 +1,13 @@
 import { Component, computed, signal } from '@angular/core';
+import { ActivityChart } from '../activity-chart/activity-chart';
+import { UserManagement } from '../user-management/user-management';
 
 type Period = 'week' | 'month' | 'year';
 
 @Component({
   selector: 'app-dashboard-content',
   standalone: true,
-  imports: [],
+  imports: [ActivityChart, UserManagement],
   templateUrl: './dashboard-content.html',
 })
 export class DashboardContent {

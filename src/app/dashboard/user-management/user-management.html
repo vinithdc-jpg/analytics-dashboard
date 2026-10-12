@@ -1,0 +1,187 @@
+<section class="mt-8 space-y-5">
+  <!-- Heading -->
+  <div>
+    <h2 class="text-xl font-bold text-slate-900">User Management</h2>
+    <p class="mt-1 text-sm text-slate-500">Search, filter, and manage workspace users.</p>
+  </div>
+
+  <!-- Search and filters -->
+  <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
+    <label class="relative block">
+      <span class="sr-only">Search users</span>
+      <span class="pointer-events-none absolute left-3 top-3 text-slate-400"> ⌕ </span>
+      <input
+        type="search"
+        placeholder="Search name or email..."
+        [value]="searchTerm()"
+        (input)="updateSearch($any($event.target).value)"
+        class="w-full rounded-xl border border-slate-200 bg-white py-3 pl-9 pr-4 text-sm outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-100"
+      />
+    </label>
+
+    <label>
+      <span class="sr-only">Filter by role</span>
+      <select
+        [value]="selectedRole()"
+        (change)="updateRole($any($event.target).value)"
+        class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none focus:border-violet-500"
+      >
+        <option value="All">All roles</option>
+        <option value="Admin">Admin</option>
+        <option value="Manager">Manager</option>
+        <option value="Analyst">Analyst</option>
+      </select>
+    </label>
+
+    <label>
+      <span class="sr-only">Filter by status</span>
+      <select
+        [value]="selectedStatus()"
+        (change)="updateStatus($any($event.target).value)"
+        class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none focus:border-violet-500"
+      >
+        <option value="All">All statuses</option>
+        <option value="Active">Active</option>
+        <option value="Inactive">Inactive</option>
+      </select>
+    </label>
+  </div>
+
+  <!-- Data table -->
+  <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <div class="overflow-x-auto">
+      <table class="w-full min-w-190 text-left text-sm">
+        <thead class="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
+          <tr>
+            <th scope="col" class="px-6 py-4">
+              <button
+                type="button"
+                (click)="sortBy('name')"
+                class="font-semibold hover:text-violet-700"
+              >
+                Name
+                @if (sortField() === 'name') {
+                  {{ sortDirection() === 'asc' ? '↑' : '↓' }}
+                }
+              </button>
+            </th>
+
+            <th scope="col" class="px-6 py-4">
+              <button
+                type="button"
+                (click)="sortBy('email')"
+                class="font-semibold hover:text-violet-700"
+              >
+                Email
+                @if (sortField() === 'email') {
+                  {{ sortDirection() === 'asc' ? '↑' : '↓' }}
+                }
+              </button>
+            </th>
+
+            <th scope="col" class="px-6 py-4">Role</th>
+            <th scope="col" class="px-6 py-4">Status</th>
+
+            <th scope="col" class="px-6 py-4">
+              <button
+                type="button"
+                (click)="sortBy('createdAt')"
+                class="font-semibold hover:text-violet-700"
+              >
+                Joined
+                @if (sortField() === 'createdAt') {
+                  {{ sortDirection() === 'asc' ? '↑' : '↓' }}
+                }
+              </button>
+            </th>
+          </tr>
+        </thead>
+
+        <tbody class="divide-y divide-slate-100">
+          @for (user of visibleUsers(); track user.id) {
+            <tr class="transition hover:bg-slate-50">
+              <td class="px-6 py-4">
+                <div class="flex items-center gap-3">
+                  <div
+                    class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-violet-100 font-semibold text-violet-700"
+                  >
+                    {{ user.name.charAt(0) }}
+                  </div>
+                  <span class="font-semibold text-slate-800">
+                    {{ user.name }}
+                  </span>
+                </div>
+              </td>
+
+              <td class="px-6 py-4 text-slate-600">{{ user.email }}</td>
+
+              <td class="px-6 py-4">
+                <span
+                  class="rounded-lg bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-700"
+                >
+                  {{ user.role }}
+                </span>
+              </td>
+
+              <td class="px-6 py-4">
+                <span
+                  class="rounded-full px-2.5 py-1 text-xs font-semibold"
+                  [class.bg-emerald-50]="user.status === 'Active'"
+                  [class.text-emerald-700]="user.status === 'Active'"
+                  [class.bg-slate-100]="user.status === 'Inactive'"
+                  [class.text-slate-600]="user.status === 'Inactive'"
+                >
+                  {{ user.status }}
+                </span>
+              </td>
+
+              <td class="px-6 py-4 text-slate-600">
+                {{ user.createdAt }}
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="5" class="px-6 py-12 text-center">
+                <p class="font-semibold text-slate-700">No users found</p>
+                <p class="mt-1 text-sm text-slate-500">
+                  Try another search term or change your filters.
+                </p>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <div
+      class="flex flex-col gap-3 border-t border-slate-200 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6"
+    >
+      <p class="text-sm text-slate-500">
+        Showing {{ startItem() }}–{{ endItem() }} of {{ sortedUsers().length }} users
+      </p>
+
+      <div class="flex items-center gap-3">
+        <button
+          type="button"
+          (click)="previousPage()"
+          [disabled]="currentPage() === 1"
+          class="rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+        >
+          Previous
+        </button>
+
+        <span class="text-sm text-slate-600"> Page {{ currentPage() }} of {{ totalPages() }} </span>
+
+        <button
+          type="button"
+          (click)="nextPage()"
+          [disabled]="currentPage() === totalPages()"
+          class="rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+        >
+          Next
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
