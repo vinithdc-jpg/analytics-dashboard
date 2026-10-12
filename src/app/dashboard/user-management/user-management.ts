@@ -11,6 +11,7 @@ type SortDirection = 'asc' | 'desc';
   imports: [FormsModule],
   templateUrl: './user-management.html',
 })
+
 export class UserManagement {
   // Sample user records
   private userService = inject(UserService);
