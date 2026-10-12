@@ -2,12 +2,11 @@ import { Component } from '@angular/core';
 import { Sidebar } from './layout/sidebar/sidebar';
 import { RouterOutlet } from '@angular/router';
 import { Topbar } from './layout/topbar/topbar';
-import { DashboardContent } from './dashboard/dashboard-content/dashboard-content';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [Sidebar, Topbar, DashboardContent, RouterOutlet],
+  imports: [Sidebar, Topbar, RouterOutlet],
   templateUrl: './app.html',
 })
 export class App {
