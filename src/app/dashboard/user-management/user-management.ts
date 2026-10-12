@@ -11,7 +11,6 @@ type SortDirection = 'asc' | 'desc';
   imports: [FormsModule],
   templateUrl: './user-management.html',
 })
-
 export class UserManagement {
   // Sample user records
   private userService = inject(UserService);
@@ -206,4 +205,9 @@ export class UserManagement {
 
   isRoleFilterOpen = false;
   isStatusFilterOpen = false;
+  isUserModalOpen = false;
+
+  closeUserModal(): void {
+    this.isUserModalOpen = false;
+  }
 }

@@ -181,201 +181,251 @@
         <h3 class="text-lg font-bold text-slate-900">
           {{ editingUserId() !== null ? 'Edit User' : 'Add a User' }}
         </h3>
-        <p class="mt-1 text-sm text-slate-500">Enter the user's details below.</p>
       </div>
-
-      <button
-        type="button"
-        (click)="startAddUser()"
-        class="w-fit rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
-      >
-        + New user
-      </button>
     </div>
+    <button
+      type="button"
+      (click)="isUserModalOpen = true"
+      class="rounded-xl bg-violet-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-violet-700"
+    >
+      + Add User
+    </button>
 
-    <form #userFormRef="ngForm" (ngSubmit)="saveUser(userFormRef)" class="mt-5 space-y-5">
-      <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
-        <!-- Name -->
-        <div>
-          <label for="userName" class="mb-2 block text-sm font-medium text-slate-700">
-            Full name
-          </label>
-          <input
-            id="userName"
-            name="name"
-            type="text"
-            [(ngModel)]="userForm.name"
-            #nameRef="ngModel"
-            required
-            minlength="2"
-            placeholder="Enter full name"
-            class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-100"
-          />
-          @if (nameRef.invalid && (nameRef.touched || userFormRef.submitted)) {
-            <p class="mt-1 text-xs text-red-600">Enter a name with at least 2 characters.</p>
-          }
-        </div>
+    @if (isUserModalOpen) {
+      <!-- Modal overlay -->
+      <div
+        class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4 backdrop-blur-sm"
+        (click)="closeUserModal()"
+      >
+        <!-- Modal content -->
+        <div
+          class="relative w-full max-w-2xl overflow-visible rounded-2xl bg-white shadow-2xl"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="userModalTitle"
+          (click)="$event.stopPropagation()"
+        >
+          <!-- Modal header -->
+          <div class="flex items-center justify-between border-b border-slate-100 px-6 py-5">
+            <div>
+              <h2 id="userModalTitle" class="text-lg font-semibold text-slate-900">
+                {{ editingUserId() !== null ? 'Edit User' : 'Add New User' }}
+              </h2>
 
-        <!-- Email -->
-        <div>
-          <label for="userEmail" class="mb-2 block text-sm font-medium text-slate-700">
-            Email address
-          </label>
-          <input
-            id="userEmail"
-            name="email"
-            type="email"
-            [(ngModel)]="userForm.email"
-            #emailRef="ngModel"
-            required
-            email
-            placeholder="name@example.com"
-            class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-100"
-          />
-          @if (emailRef.invalid && (emailRef.touched || userFormRef.submitted)) {
-            <p class="mt-1 text-xs text-red-600">Enter a valid email address.</p>
-          }
-        </div>
+              <p class="mt-1 text-sm text-slate-500">Enter the user's details below.</p>
+            </div>
 
-        <!-- Role -->
-        <div>
-          <label for="userRole" class="mb-2 block text-sm font-medium text-slate-700"> Role </label>
-          <div class="relative w-full">
-            <!-- Dropdown trigger -->
             <button
               type="button"
-              (click)="isRoleOpen = !isRoleOpen"
-              class="flex w-full items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3 text-left text-sm text-slate-700 shadow-sm outline-none transition hover:border-violet-400 focus:border-violet-500 focus:ring-2 focus:ring-violet-100"
-              [attr.aria-expanded]="isRoleOpen"
-              aria-haspopup="listbox"
+              (click)="closeUserModal()"
+              aria-label="Close modal"
+              class="rounded-lg p-2 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
             >
-              <span>{{ userForm.role || 'Select role' }}</span>
-            </button>
-
-            <!-- Custom dropdown options -->
-            @if (isRoleOpen) {
-              <div
-                class="absolute left-0 top-full z-50 mt-2 w-full overflow-hidden rounded-xl border border-slate-200 bg-white p-1 shadow-xl"
-                role="listbox"
-                aria-label="User role"
-              >
-                @for (role of roleOptions; track role) {
-                  <button
-                    type="button"
-                    role="option"
-                    [attr.aria-selected]="userForm.role === role"
-                    (click)="selectRole(role)"
-                    class="flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm transition hover:bg-violet-50 hover:text-violet-700"
-                    [class.bg-violet-50]="userForm.role === role"
-                    [class.text-violet-700]="userForm.role === role"
-                  >
-                    <span>{{ role }}</span>
-
-                    @if (userForm.role === role) {
-                      <span class="font-semibold">✓</span>
-                    }
-                  </button>
-                }
-              </div>
-            }
-          </div>
-        </div>
-
-        <!-- Status -->
-        <div>
-          <label for="userStatus" class="mb-2 block text-sm font-medium text-slate-700">
-            Account status
-          </label>
-
-          <div class="relative w-full">
-            <button
-              type="button"
-              (click)="isStatusOpen = !isStatusOpen"
-              class="flex w-full items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3 text-left text-sm text-slate-700 shadow-sm outline-none transition hover:border-violet-400 focus:border-violet-500 focus:ring-2 focus:ring-violet-100"
-              [attr.aria-expanded]="isStatusOpen"
-              aria-haspopup="listbox"
-            >
-              <span class="flex items-center gap-2">
-                <span
-                  class="h-2 w-2 rounded-full"
-                  [class.bg-emerald-500]="userForm.status === 'Active'"
-                  [class.bg-slate-400]="userForm.status === 'Inactive'"
-                ></span>
-
-                {{ userForm.status || 'Select status' }}
-              </span>
-
-              <svg
-                class="h-4 w-4 transition-transform"
-                [class.rotate-180]="isStatusOpen"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
                   stroke-width="2"
-                  d="m6 9 6 6 6-6"
+                  d="M6 18 18 6M6 6l12 12"
                 />
               </svg>
             </button>
+          </div>
 
-            @if (isStatusOpen) {
-              <div
-                class="absolute left-0 top-full z-50 mt-2 w-full overflow-hidden rounded-xl border border-slate-200 bg-white p-1 shadow-xl"
-                role="listbox"
-                aria-label="User status"
-              >
-                @for (status of statusOptions; track status) {
+          <!-- Modal body -->
+          <div class="max-h-[75vh] overflow-y-auto px-6 py-5">
+            <!-- PASTE YOUR EXISTING FORM HERE -->
+            <form #userFormRef="ngForm" (ngSubmit)="saveUser(userFormRef)" class="space-y-5">
+              <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+                <!-- Name -->
+                <div>
+                  <label for="userName" class="mb-2 block text-sm font-medium text-slate-700">
+                    Full name
+                  </label>
+                  <input
+                    id="userName"
+                    name="name"
+                    type="text"
+                    [(ngModel)]="userForm.name"
+                    #nameRef="ngModel"
+                    required
+                    minlength="2"
+                    placeholder="Enter full name"
+                    class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-100"
+                  />
+                  @if (nameRef.invalid && (nameRef.touched || userFormRef.submitted)) {
+                    <p class="mt-1 text-xs text-red-600">
+                      Enter a name with at least 2 characters.
+                    </p>
+                  }
+                </div>
+
+                <!-- Email -->
+                <div>
+                  <label for="userEmail" class="mb-2 block text-sm font-medium text-slate-700">
+                    Email address
+                  </label>
+                  <input
+                    id="userEmail"
+                    name="email"
+                    type="email"
+                    [(ngModel)]="userForm.email"
+                    #emailRef="ngModel"
+                    required
+                    email
+                    placeholder="name@example.com"
+                    class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-100"
+                  />
+                  @if (emailRef.invalid && (emailRef.touched || userFormRef.submitted)) {
+                    <p class="mt-1 text-xs text-red-600">Enter a valid email address.</p>
+                  }
+                </div>
+
+                <!-- Role -->
+                <div>
+                  <label for="userRole" class="mb-2 block text-sm font-medium text-slate-700">
+                    Role
+                  </label>
+                  <div class="relative w-full">
+                    <!-- Dropdown trigger -->
+                    <button
+                      type="button"
+                      (click)="isRoleOpen = !isRoleOpen"
+                      class="flex w-full items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3 text-left text-sm text-slate-700 shadow-sm outline-none transition hover:border-violet-400 focus:border-violet-500 focus:ring-2 focus:ring-violet-100"
+                      [attr.aria-expanded]="isRoleOpen"
+                      aria-haspopup="listbox"
+                    >
+                      <span>{{ userForm.role || 'Select role' }}</span>
+                    </button>
+
+                    <!-- Custom dropdown options -->
+                    @if (isRoleOpen) {
+                      <div
+                        class="absolute left-0 top-full z-50 mt-2 w-full overflow-hidden rounded-xl border border-slate-200 bg-white p-1 shadow-xl"
+                        role="listbox"
+                        aria-label="User role"
+                      >
+                        @for (role of roleOptions; track role) {
+                          <button
+                            type="button"
+                            role="option"
+                            [attr.aria-selected]="userForm.role === role"
+                            (click)="selectRole(role)"
+                            class="flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm transition hover:bg-violet-50 hover:text-violet-700"
+                            [class.bg-violet-50]="userForm.role === role"
+                            [class.text-violet-700]="userForm.role === role"
+                          >
+                            <span>{{ role }}</span>
+
+                            @if (userForm.role === role) {
+                              <span class="font-semibold">✓</span>
+                            }
+                          </button>
+                        }
+                      </div>
+                    }
+                  </div>
+                </div>
+
+                <!-- Status -->
+                <div>
+                  <label for="userStatus" class="mb-2 block text-sm font-medium text-slate-700">
+                    Account status
+                  </label>
+
+                  <div class="relative w-full">
+                    <button
+                      type="button"
+                      (click)="isStatusOpen = !isStatusOpen"
+                      class="flex w-full items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3 text-left text-sm text-slate-700 shadow-sm outline-none transition hover:border-violet-400 focus:border-violet-500 focus:ring-2 focus:ring-violet-100"
+                      [attr.aria-expanded]="isStatusOpen"
+                      aria-haspopup="listbox"
+                    >
+                      <span class="flex items-center gap-2">
+                        <span
+                          class="h-2 w-2 rounded-full"
+                          [class.bg-emerald-500]="userForm.status === 'Active'"
+                          [class.bg-slate-400]="userForm.status === 'Inactive'"
+                        ></span>
+
+                        {{ userForm.status || 'Select status' }}
+                      </span>
+
+                      <svg
+                        class="h-4 w-4 transition-transform"
+                        [class.rotate-180]="isStatusOpen"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="m6 9 6 6 6-6"
+                        />
+                      </svg>
+                    </button>
+
+                    @if (isStatusOpen) {
+                      <div
+                        class="absolute left-0 top-full z-50 mt-2 w-full overflow-hidden rounded-xl border border-slate-200 bg-white p-1 shadow-xl"
+                        role="listbox"
+                        aria-label="User status"
+                      >
+                        @for (status of statusOptions; track status) {
+                          <button
+                            type="button"
+                            role="option"
+                            [attr.aria-selected]="userForm.status === status"
+                            (click)="selectStatus(status)"
+                            class="flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm transition hover:bg-violet-50 hover:text-violet-700"
+                            [class.bg-violet-50]="userForm.status === status"
+                            [class.text-violet-700]="userForm.status === status"
+                          >
+                            <span class="flex items-center gap-2">
+                              <span
+                                class="h-2 w-2 rounded-full"
+                                [class.bg-emerald-500]="status === 'Active'"
+                                [class.bg-slate-400]="status === 'Inactive'"
+                              ></span>
+                              {{ status }}
+                            </span>
+
+                            @if (userForm.status === status) {
+                              <span class="font-semibold">✓</span>
+                            }
+                          </button>
+                        }
+                      </div>
+                    }
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex flex-wrap justify-end gap-3 border-t border-slate-100 pt-4">
+                @if (editingUserId() !== null) {
                   <button
                     type="button"
-                    role="option"
-                    [attr.aria-selected]="userForm.status === status"
-                    (click)="selectStatus(status)"
-                    class="flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm transition hover:bg-violet-50 hover:text-violet-700"
-                    [class.bg-violet-50]="userForm.status === status"
-                    [class.text-violet-700]="userForm.status === status"
+                    (click)="cancelForm(userFormRef)"
+                    class="rounded-xl border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50"
                   >
-                    <span class="flex items-center gap-2">
-                      <span
-                        class="h-2 w-2 rounded-full"
-                        [class.bg-emerald-500]="status === 'Active'"
-                        [class.bg-slate-400]="status === 'Inactive'"
-                      ></span>
-                      {{ status }}
-                    </span>
-
-                    @if (userForm.status === status) {
-                      <span class="font-semibold">✓</span>
-                    }
+                    Cancel
                   </button>
                 }
+
+                <button
+                  type="submit"
+                  class="rounded-xl bg-violet-600 px-5 py-3 text-sm font-semibold text-white hover:bg-violet-700"
+                >
+                  {{ editingUserId() !== null ? 'Save Changes' : 'Add User' }}
+                </button>
               </div>
-            }
+            </form>
           </div>
         </div>
       </div>
-
-      <div class="flex flex-wrap justify-end gap-3 border-t border-slate-100 pt-4">
-        @if (editingUserId() !== null) {
-          <button
-            type="button"
-            (click)="cancelForm(userFormRef)"
-            class="rounded-xl border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50"
-          >
-            Cancel
-          </button>
-        }
-
-        <button
-          type="submit"
-          class="rounded-xl bg-violet-600 px-5 py-3 text-sm font-semibold text-white hover:bg-violet-700"
-        >
-          {{ editingUserId() !== null ? 'Save Changes' : 'Add User' }}
-        </button>
-      </div>
-    </form>
+    }
   </section>
 
   <!-- Data table -->
