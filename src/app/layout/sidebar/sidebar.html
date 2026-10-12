@@ -21,13 +21,13 @@
       Workspace
     </p>
 
-    @for (item of navigationItems; track item.label) {
+    @for (item of navigationItems; track item.route) {
       <a
-        [href]="item.href"
+        [routerLink]="item.route"
+        routerLinkActive="bg-violet-600 text-white"
+        [routerLinkActiveOptions]="{ exact: true }"
         (click)="closeMenu.emit()"
-        class="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition hover:bg-white/10 hover:text-white"
-        [class.bg-violet-600]="item.label === 'Dashboard'"
-        [class.text-white]="item.label === 'Dashboard'"
+        class="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
       >
         <span class="text-lg">{{ item.icon }}</span>
         <span>{{ item.label }}</span>

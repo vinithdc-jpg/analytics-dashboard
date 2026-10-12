@@ -1,125 +1,21 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
+import { FormsModule, NgForm } from '@angular/forms';
+import { UserService, User, UserRole, UserStatus } from '../../services/user';
 
-type UserRole = 'Admin' | 'Manager' | 'Analyst';
-type UserStatus = 'Active' | 'Inactive';
 type SortField = 'name' | 'email' | 'createdAt';
 type SortDirection = 'asc' | 'desc';
-
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  role: UserRole;
-  status: UserStatus;
-  createdAt: string;
-}
 
 @Component({
   selector: 'app-user-management',
   standalone: true,
-  imports: [],
+  imports: [FormsModule],
   templateUrl: './user-management.html',
 })
 export class UserManagement {
   // Sample user records
-  users = signal<User[]>([
-    {
-      id: 1,
-      name: 'Aarav Sharma',
-      email: 'aarav@example.com',
-      role: 'Admin',
-      status: 'Active',
-      createdAt: '2026-01-12',
-    },
-    {
-      id: 2,
-      name: 'Priya Nair',
-      email: 'priya@example.com',
-      role: 'Manager',
-      status: 'Active',
-      createdAt: '2026-02-05',
-    },
-    {
-      id: 3,
-      name: 'Rahul Verma',
-      email: 'rahul@example.com',
-      role: 'Analyst',
-      status: 'Inactive',
-      createdAt: '2026-02-19',
-    },
-    {
-      id: 4,
-      name: 'Sneha Rao',
-      email: 'sneha@example.com',
-      role: 'Manager',
-      status: 'Active',
-      createdAt: '2026-03-03',
-    },
-    {
-      id: 5,
-      name: 'Arjun Patel',
-      email: 'arjun@example.com',
-      role: 'Analyst',
-      status: 'Active',
-      createdAt: '2026-03-11',
-    },
-    {
-      id: 6,
-      name: 'Meera Das',
-      email: 'meera@example.com',
-      role: 'Admin',
-      status: 'Inactive',
-      createdAt: '2026-04-02',
-    },
-    {
-      id: 7,
-      name: 'Kiran Shetty',
-      email: 'kiran@example.com',
-      role: 'Analyst',
-      status: 'Active',
-      createdAt: '2026-04-15',
-    },
-    {
-      id: 8,
-      name: 'Ananya Iyer',
-      email: 'ananya@example.com',
-      role: 'Manager',
-      status: 'Active',
-      createdAt: '2026-05-01',
-    },
-    {
-      id: 9,
-      name: 'Vikram Singh',
-      email: 'vikram@example.com',
-      role: 'Analyst',
-      status: 'Inactive',
-      createdAt: '2026-05-14',
-    },
-    {
-      id: 10,
-      name: 'Diya Kumar',
-      email: 'diya@example.com',
-      role: 'Admin',
-      status: 'Active',
-      createdAt: '2026-06-08',
-    },
-    {
-      id: 11,
-      name: 'Rohan Joshi',
-      email: 'rohan@example.com',
-      role: 'Manager',
-      status: 'Inactive',
-      createdAt: '2026-06-21',
-    },
-    {
-      id: 12,
-      name: 'Ishita Menon',
-      email: 'ishita@example.com',
-      role: 'Analyst',
-      status: 'Active',
-      createdAt: '2026-07-10',
-    },
-  ]);
+  private userService = inject(UserService);
+
+  readonly users = this.userService.users;
 
   searchTerm = signal('');
   selectedRole = signal('All');
@@ -213,4 +109,100 @@ export class UserManagement {
       this.currentPage.update((page) => page + 1);
     }
   }
+
+  // Form state
+  editingUserId = signal<number | null>(null);
+  isRoleOpen = false;
+  isStatusOpen = false;
+
+  readonly roleOptions: UserRole[] = ['Admin', 'Manager', 'Analyst'];
+  readonly statusOptions: UserStatus[] = ['Active', 'Inactive'];
+
+  userForm = {
+    name: '',
+    email: '',
+    role: 'Analyst' as UserRole,
+    status: 'Active' as UserStatus,
+  };
+
+  selectRole(role: UserRole): void {
+    this.userForm.role = role;
+    this.isRoleOpen = false;
+  }
+
+  selectStatus(status: UserStatus): void {
+    this.userForm.status = status;
+    this.isStatusOpen = false;
+  }
+
+  // Open a blank form for a new user
+  startAddUser(): void {
+    this.editingUserId.set(null);
+    this.isRoleOpen = false;
+    this.isStatusOpen = false;
+    this.userForm = {
+      name: '',
+      email: '',
+      role: 'Analyst',
+      status: 'Active',
+    };
+  }
+
+  // Fill the form with an existing user's details
+  editUser(user: User): void {
+    this.editingUserId.set(user.id);
+    this.userForm = {
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      status: user.status,
+    };
+  }
+
+  // Add a new user or update the selected user
+  saveUser(form: NgForm): void {
+    if (form.invalid) {
+      form.control.markAllAsTouched();
+      return;
+    }
+
+    const editingId = this.editingUserId();
+
+    if (editingId !== null) {
+      this.userService.updateUser(editingId, {
+        ...this.userForm,
+      });
+    } else {
+      this.userService.addUser({
+        ...this.userForm,
+      });
+    }
+
+    // Reset table filters after saving
+    this.searchTerm.set('');
+    this.selectedRole.set('All');
+    this.selectedStatus.set('All');
+    this.sortField.set('name');
+    this.sortDirection.set('asc');
+    this.currentPage.set(1);
+
+    this.cancelForm(form);
+  }
+
+  // Reset the form and leave edit mode
+  cancelForm(form: NgForm): void {
+    this.editingUserId.set(null);
+    this.isRoleOpen = false;
+    this.isStatusOpen = false;
+    this.userForm = {
+      name: '',
+      email: '',
+      role: 'Analyst',
+      status: 'Active',
+    };
+    form.resetForm(this.userForm);
+  }
+
+  isRoleFilterOpen = false;
+  isStatusFilterOpen = false;
 }

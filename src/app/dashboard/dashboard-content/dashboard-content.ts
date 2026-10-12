@@ -1,6 +1,6 @@
 import { Component, computed, signal } from '@angular/core';
 import { ActivityChart } from '../activity-chart/activity-chart';
-import { UserManagement } from '../user-management/user-management';
+import { UserManagement } from '../user-management/user-management'
 
 type Period = 'week' | 'month' | 'year';
 
@@ -97,4 +97,5 @@ export class DashboardContent {
       this.selectedPeriod.set(value);
     }
   }
+  isPeriodOpen = false;
 }

@@ -21,31 +21,362 @@
 
     <label>
       <span class="sr-only">Filter by role</span>
-      <select
-        [value]="selectedRole()"
-        (change)="updateRole($any($event.target).value)"
-        class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none focus:border-violet-500"
-      >
-        <option value="All">All roles</option>
-        <option value="Admin">Admin</option>
-        <option value="Manager">Manager</option>
-        <option value="Analyst">Analyst</option>
-      </select>
+
+      <div class="relative w-full">
+        <!-- Dropdown trigger -->
+        <button
+          type="button"
+          (click)="isRoleFilterOpen = !isRoleFilterOpen"
+          class="flex w-full items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3 text-left text-sm text-slate-700 shadow-sm transition hover:border-violet-400 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-100"
+          [attr.aria-expanded]="isRoleFilterOpen"
+          aria-haspopup="listbox"
+        >
+          <span>
+            {{ selectedRole() === 'All' ? 'All roles' : selectedRole() }}
+          </span>
+
+          <svg
+            class="h-4 w-4 transition-transform"
+            [class.rotate-180]="isRoleFilterOpen"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="m6 9 6 6 6-6"
+            />
+          </svg>
+        </button>
+
+        <!-- Dropdown options -->
+        @if (isRoleFilterOpen) {
+          <div
+            class="absolute left-0 top-full z-50 mt-2 w-full overflow-hidden rounded-xl border border-slate-200 bg-white p-1 shadow-xl"
+            role="listbox"
+            aria-label="Filter by role"
+          >
+            @for (
+              role of [
+                { label: 'All roles', value: 'All' },
+                { label: 'Admin', value: 'Admin' },
+                { label: 'Manager', value: 'Manager' },
+                { label: 'Analyst', value: 'Analyst' },
+              ];
+              track role.value
+            ) {
+              <button
+                type="button"
+                role="option"
+                [attr.aria-selected]="selectedRole() === role.value"
+                (click)="updateRole(role.value); isRoleFilterOpen = false"
+                class="flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm transition hover:bg-violet-50 hover:text-violet-700"
+                [class.bg-violet-50]="selectedRole() === role.value"
+                [class.text-violet-700]="selectedRole() === role.value"
+              >
+                <span>{{ role.label }}</span>
+
+                @if (selectedRole() === role.value) {
+                  <span class="font-semibold">✓</span>
+                }
+              </button>
+            }
+          </div>
+        }
+      </div>
     </label>
 
     <label>
       <span class="sr-only">Filter by status</span>
-      <select
-        [value]="selectedStatus()"
-        (change)="updateStatus($any($event.target).value)"
-        class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none focus:border-violet-500"
-      >
-        <option value="All">All statuses</option>
-        <option value="Active">Active</option>
-        <option value="Inactive">Inactive</option>
-      </select>
+
+      <div class="relative w-full">
+        <!-- Dropdown trigger -->
+        <button
+          type="button"
+          (click)="isStatusFilterOpen = !isStatusFilterOpen"
+          class="flex w-full items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3 text-left text-sm text-slate-700 shadow-sm transition hover:border-violet-400 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-100"
+          [attr.aria-expanded]="isStatusFilterOpen"
+          aria-haspopup="listbox"
+        >
+          <span class="flex items-center gap-2">
+            @if (selectedStatus() !== 'All') {
+              <span
+                class="h-2 w-2 rounded-full"
+                [class.bg-emerald-500]="selectedStatus() === 'Active'"
+                [class.bg-slate-400]="selectedStatus() === 'Inactive'"
+              ></span>
+            }
+
+            {{ selectedStatus() === 'All' ? 'All statuses' : selectedStatus() }}
+          </span>
+
+          <svg
+            class="h-4 w-4 transition-transform"
+            [class.rotate-180]="isStatusFilterOpen"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="m6 9 6 6 6-6"
+            />
+          </svg>
+        </button>
+
+        <!-- Dropdown options -->
+        @if (isStatusFilterOpen) {
+          <div
+            class="absolute left-0 top-full z-50 mt-2 w-full overflow-hidden rounded-xl border border-slate-200 bg-white p-1 shadow-xl"
+            role="listbox"
+            aria-label="Filter by status"
+          >
+            @for (
+              status of [
+                { label: 'All statuses', value: 'All' },
+                { label: 'Active', value: 'Active' },
+                { label: 'Inactive', value: 'Inactive' },
+              ];
+              track status.value
+            ) {
+              <button
+                type="button"
+                role="option"
+                [attr.aria-selected]="selectedStatus() === status.value"
+                (click)="updateStatus(status.value); isStatusFilterOpen = false"
+                class="flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm transition hover:bg-violet-50 hover:text-violet-700"
+                [class.bg-violet-50]="selectedStatus() === status.value"
+                [class.text-violet-700]="selectedStatus() === status.value"
+              >
+                <span class="flex items-center gap-2">
+                  @if (status.value !== 'All') {
+                    <span
+                      class="h-2 w-2 rounded-full"
+                      [class.bg-emerald-500]="status.value === 'Active'"
+                      [class.bg-slate-400]="status.value === 'Inactive'"
+                    ></span>
+                  }
+
+                  {{ status.label }}
+                </span>
+
+                @if (selectedStatus() === status.value) {
+                  <span class="font-semibold">✓</span>
+                }
+              </button>
+            }
+          </div>
+        }
+      </div>
     </label>
   </div>
+  <!-- Add user / edit user form -->
+  <section class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+    <div class="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
+      <div>
+        <h3 class="text-lg font-bold text-slate-900">
+          {{ editingUserId() !== null ? 'Edit User' : 'Add a User' }}
+        </h3>
+        <p class="mt-1 text-sm text-slate-500">Enter the user's details below.</p>
+      </div>
+
+      <button
+        type="button"
+        (click)="startAddUser()"
+        class="w-fit rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+      >
+        + New user
+      </button>
+    </div>
+
+    <form #userFormRef="ngForm" (ngSubmit)="saveUser(userFormRef)" class="mt-5 space-y-5">
+      <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+        <!-- Name -->
+        <div>
+          <label for="userName" class="mb-2 block text-sm font-medium text-slate-700">
+            Full name
+          </label>
+          <input
+            id="userName"
+            name="name"
+            type="text"
+            [(ngModel)]="userForm.name"
+            #nameRef="ngModel"
+            required
+            minlength="2"
+            placeholder="Enter full name"
+            class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-100"
+          />
+          @if (nameRef.invalid && (nameRef.touched || userFormRef.submitted)) {
+            <p class="mt-1 text-xs text-red-600">Enter a name with at least 2 characters.</p>
+          }
+        </div>
+
+        <!-- Email -->
+        <div>
+          <label for="userEmail" class="mb-2 block text-sm font-medium text-slate-700">
+            Email address
+          </label>
+          <input
+            id="userEmail"
+            name="email"
+            type="email"
+            [(ngModel)]="userForm.email"
+            #emailRef="ngModel"
+            required
+            email
+            placeholder="name@example.com"
+            class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-100"
+          />
+          @if (emailRef.invalid && (emailRef.touched || userFormRef.submitted)) {
+            <p class="mt-1 text-xs text-red-600">Enter a valid email address.</p>
+          }
+        </div>
+
+        <!-- Role -->
+        <div>
+          <label for="userRole" class="mb-2 block text-sm font-medium text-slate-700"> Role </label>
+          <div class="relative w-full">
+            <!-- Dropdown trigger -->
+            <button
+              type="button"
+              (click)="isRoleOpen = !isRoleOpen"
+              class="flex w-full items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3 text-left text-sm text-slate-700 shadow-sm outline-none transition hover:border-violet-400 focus:border-violet-500 focus:ring-2 focus:ring-violet-100"
+              [attr.aria-expanded]="isRoleOpen"
+              aria-haspopup="listbox"
+            >
+              <span>{{ userForm.role || 'Select role' }}</span>
+            </button>
+
+            <!-- Custom dropdown options -->
+            @if (isRoleOpen) {
+              <div
+                class="absolute left-0 top-full z-50 mt-2 w-full overflow-hidden rounded-xl border border-slate-200 bg-white p-1 shadow-xl"
+                role="listbox"
+                aria-label="User role"
+              >
+                @for (role of roleOptions; track role) {
+                  <button
+                    type="button"
+                    role="option"
+                    [attr.aria-selected]="userForm.role === role"
+                    (click)="selectRole(role)"
+                    class="flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm transition hover:bg-violet-50 hover:text-violet-700"
+                    [class.bg-violet-50]="userForm.role === role"
+                    [class.text-violet-700]="userForm.role === role"
+                  >
+                    <span>{{ role }}</span>
+
+                    @if (userForm.role === role) {
+                      <span class="font-semibold">✓</span>
+                    }
+                  </button>
+                }
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Status -->
+        <div>
+          <label for="userStatus" class="mb-2 block text-sm font-medium text-slate-700">
+            Account status
+          </label>
+
+          <div class="relative w-full">
+            <button
+              type="button"
+              (click)="isStatusOpen = !isStatusOpen"
+              class="flex w-full items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3 text-left text-sm text-slate-700 shadow-sm outline-none transition hover:border-violet-400 focus:border-violet-500 focus:ring-2 focus:ring-violet-100"
+              [attr.aria-expanded]="isStatusOpen"
+              aria-haspopup="listbox"
+            >
+              <span class="flex items-center gap-2">
+                <span
+                  class="h-2 w-2 rounded-full"
+                  [class.bg-emerald-500]="userForm.status === 'Active'"
+                  [class.bg-slate-400]="userForm.status === 'Inactive'"
+                ></span>
+
+                {{ userForm.status || 'Select status' }}
+              </span>
+
+              <svg
+                class="h-4 w-4 transition-transform"
+                [class.rotate-180]="isStatusOpen"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="m6 9 6 6 6-6"
+                />
+              </svg>
+            </button>
+
+            @if (isStatusOpen) {
+              <div
+                class="absolute left-0 top-full z-50 mt-2 w-full overflow-hidden rounded-xl border border-slate-200 bg-white p-1 shadow-xl"
+                role="listbox"
+                aria-label="User status"
+              >
+                @for (status of statusOptions; track status) {
+                  <button
+                    type="button"
+                    role="option"
+                    [attr.aria-selected]="userForm.status === status"
+                    (click)="selectStatus(status)"
+                    class="flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm transition hover:bg-violet-50 hover:text-violet-700"
+                    [class.bg-violet-50]="userForm.status === status"
+                    [class.text-violet-700]="userForm.status === status"
+                  >
+                    <span class="flex items-center gap-2">
+                      <span
+                        class="h-2 w-2 rounded-full"
+                        [class.bg-emerald-500]="status === 'Active'"
+                        [class.bg-slate-400]="status === 'Inactive'"
+                      ></span>
+                      {{ status }}
+                    </span>
+
+                    @if (userForm.status === status) {
+                      <span class="font-semibold">✓</span>
+                    }
+                  </button>
+                }
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap justify-end gap-3 border-t border-slate-100 pt-4">
+        @if (editingUserId() !== null) {
+          <button
+            type="button"
+            (click)="cancelForm(userFormRef)"
+            class="rounded-xl border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+          >
+            Cancel
+          </button>
+        }
+
+        <button
+          type="submit"
+          class="rounded-xl bg-violet-600 px-5 py-3 text-sm font-semibold text-white hover:bg-violet-700"
+        >
+          {{ editingUserId() !== null ? 'Save Changes' : 'Add User' }}
+        </button>
+      </div>
+    </form>
+  </section>
 
   <!-- Data table -->
   <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
@@ -94,6 +425,7 @@
                 }
               </button>
             </th>
+            <th scope="col" class="px-6 py-4">Actions</th>
           </tr>
         </thead>
 
@@ -137,6 +469,15 @@
 
               <td class="px-6 py-4 text-slate-600">
                 {{ user.createdAt }}
+              </td>
+              <td class="px-6 py-4">
+                <button
+                  type="button"
+                  (click)="editUser(user)"
+                  class="rounded-lg px-3 py-2 text-sm font-semibold text-violet-700 hover:bg-violet-50"
+                >
+                  Edit
+                </button>
               </td>
             </tr>
           } @empty {
