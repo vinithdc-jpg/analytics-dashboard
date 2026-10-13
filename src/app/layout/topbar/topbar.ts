@@ -18,4 +18,5 @@ export class Topbar {
       this.auth.setRole(value as AppRole);
     }
   }
+  isDemoRoleOpen = true
 }
