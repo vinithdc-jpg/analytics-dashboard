@@ -146,17 +146,21 @@ export class UserManagement {
       role: 'Analyst',
       status: 'Active',
     };
+    this.isUserModalOpen = true;
   }
 
   // Fill the form with an existing user's details
   editUser(user: User): void {
     this.editingUserId.set(user.id);
+    this.isRoleOpen = false;
+    this.isStatusOpen = false;
     this.userForm = {
       name: user.name,
       email: user.email,
       role: user.role,
       status: user.status,
     };
+    this.isUserModalOpen = true;
   }
 
   // Add a new user or update the selected user
@@ -201,6 +205,7 @@ export class UserManagement {
       status: 'Active',
     };
     form.resetForm(this.userForm);
+    this.isUserModalOpen = false;
   }
 
   isRoleFilterOpen = false;
@@ -209,5 +214,14 @@ export class UserManagement {
 
   closeUserModal(): void {
     this.isUserModalOpen = false;
+    this.editingUserId.set(null);
+    this.isRoleOpen = false;
+    this.isStatusOpen = false;
+    this.userForm = {
+      name: '',
+      email: '',
+      role: 'Analyst',
+      status: 'Active',
+    };
   }
 }
