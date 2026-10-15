@@ -15,7 +15,7 @@
         placeholder="Search name or email..."
         [value]="searchTerm()"
         (input)="updateSearch($any($event.target).value)"
-        class="w-full rounded-xl border border-slate-200 bg-white py-3 pl-9 pr-4 text-sm outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-100"
+        class="w-full rounded-md border border-slate-200 bg-white py-3 pl-9 pr-4 text-sm outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-100"
       />
     </label>
 
@@ -27,7 +27,7 @@
         <button
           type="button"
           (click)="isRoleFilterOpen = !isRoleFilterOpen"
-          class="flex w-full items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3 text-left text-sm text-slate-700 shadow-sm transition hover:border-violet-400 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-100"
+          class="flex w-full items-center justify-between rounded-md border border-slate-200 bg-white px-4 py-3 text-left text-sm text-slate-700 shadow-sm transition hover:border-violet-400 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-100"
           [attr.aria-expanded]="isRoleFilterOpen"
           aria-haspopup="listbox"
         >
@@ -54,7 +54,7 @@
         <!-- Dropdown options -->
         @if (isRoleFilterOpen) {
           <div
-            class="absolute left-0 top-full z-50 mt-2 w-full overflow-hidden rounded-xl border border-slate-200 bg-white p-1 shadow-xl"
+            class="absolute left-0 top-full z-50 mt-2 w-full overflow-hidden rounded-md border border-slate-200 bg-white p-1 shadow-xl"
             role="listbox"
             aria-label="Filter by role"
           >
@@ -72,7 +72,7 @@
                 role="option"
                 [attr.aria-selected]="selectedRole() === role.value"
                 (click)="updateRole(role.value); isRoleFilterOpen = false"
-                class="flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm transition hover:bg-violet-50 hover:text-violet-700"
+                class="flex w-full items-center justify-between rounded-md px-3 py-2.5 text-left text-sm transition hover:bg-violet-50 hover:text-violet-700"
                 [class.bg-violet-50]="selectedRole() === role.value"
                 [class.text-violet-700]="selectedRole() === role.value"
               >
@@ -96,7 +96,7 @@
         <button
           type="button"
           (click)="isStatusFilterOpen = !isStatusFilterOpen"
-          class="flex w-full items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3 text-left text-sm text-slate-700 shadow-sm transition hover:border-violet-400 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-100"
+          class="flex w-full items-center justify-between rounded-md border border-slate-200 bg-white px-4 py-3 text-left text-sm text-slate-700 shadow-sm transition hover:border-violet-400 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-100"
           [attr.aria-expanded]="isStatusFilterOpen"
           aria-haspopup="listbox"
         >
@@ -131,7 +131,7 @@
         <!-- Dropdown options -->
         @if (isStatusFilterOpen) {
           <div
-            class="absolute left-0 top-full z-50 mt-2 w-full overflow-hidden rounded-xl border border-slate-200 bg-white p-1 shadow-xl"
+            class="absolute left-0 top-full z-50 mt-2 w-full overflow-hidden rounded-md border border-slate-200 bg-white p-1 shadow-xl"
             role="listbox"
             aria-label="Filter by status"
           >
@@ -175,7 +175,7 @@
     </label>
   </div>
   <!-- Add user / edit user form -->
-  <section class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+  <section class="rounded-md border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
     <div class="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
       <div>
         <h3 class="text-lg font-bold text-slate-900">
@@ -186,7 +186,7 @@
     <button
       type="button"
       (click)="startAddUser()"
-      class="rounded-xl bg-violet-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-violet-700"
+      class="rounded-md bg-violet-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-violet-700"
     >
       + Add User
     </button>
@@ -199,7 +199,7 @@
       >
         <!-- Modal content -->
         <div
-          class="relative w-full max-w-2xl overflow-visible rounded-2xl bg-white shadow-2xl"
+          class="relative w-full max-w-2xl overflow-visible rounded-md bg-white shadow-2xl"
           role="dialog"
           aria-modal="true"
           aria-labelledby="userModalTitle"
@@ -219,7 +219,7 @@
               type="button"
               (click)="closeUserModal()"
               aria-label="Close modal"
-              class="rounded-lg p-2 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
+              class="rounded-xl p-2 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
             >
               <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -251,7 +251,7 @@
                     required
                     minlength="2"
                     placeholder="Enter full name"
-                    class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-100"
+                    class="w-full rounded-md border border-slate-200 px-4 py-3 text-sm outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-100"
                   />
                   @if (nameRef.invalid && (nameRef.touched || userFormRef.submitted)) {
                     <p class="mt-1 text-xs text-red-600">
@@ -274,7 +274,7 @@
                     required
                     email
                     placeholder="name@example.com"
-                    class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-100"
+                    class="w-full rounded-md border border-slate-200 px-4 py-3 text-sm outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-100"
                   />
                   @if (emailRef.invalid && (emailRef.touched || userFormRef.submitted)) {
                     <p class="mt-1 text-xs text-red-600">Enter a valid email address.</p>
@@ -291,7 +291,7 @@
                     <button
                       type="button"
                       (click)="isRoleOpen = !isRoleOpen"
-                      class="flex w-full items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3 text-left text-sm text-slate-700 shadow-sm outline-none transition hover:border-violet-400 focus:border-violet-500 focus:ring-2 focus:ring-violet-100"
+                      class="flex w-full items-center justify-between rounded-md border border-slate-200 bg-white px-4 py-3 text-left text-sm text-slate-700 shadow-sm outline-none transition hover:border-violet-400 focus:border-violet-500 focus:ring-2 focus:ring-violet-100"
                       [attr.aria-expanded]="isRoleOpen"
                       aria-haspopup="listbox"
                     >
@@ -301,7 +301,7 @@
                     <!-- Custom dropdown options -->
                     @if (isRoleOpen) {
                       <div
-                        class="absolute left-0 top-full z-50 mt-2 w-full overflow-hidden rounded-xl border border-slate-200 bg-white p-1 shadow-xl"
+                        class="absolute left-0 top-full z-50 mt-2 w-full overflow-hidden rounded-md border border-slate-200 bg-white p-1 shadow-xl"
                         role="listbox"
                         aria-label="User role"
                       >
@@ -311,7 +311,7 @@
                             role="option"
                             [attr.aria-selected]="userForm.role === role"
                             (click)="selectRole(role)"
-                            class="flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm transition hover:bg-violet-50 hover:text-violet-700"
+                            class="flex w-full items-center justify-between rounded-md px-3 py-2.5 text-left text-sm transition hover:bg-violet-50 hover:text-violet-700"
                             [class.bg-violet-50]="userForm.role === role"
                             [class.text-violet-700]="userForm.role === role"
                           >
@@ -337,7 +337,7 @@
                     <button
                       type="button"
                       (click)="isStatusOpen = !isStatusOpen"
-                      class="flex w-full items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3 text-left text-sm text-slate-700 shadow-sm outline-none transition hover:border-violet-400 focus:border-violet-500 focus:ring-2 focus:ring-violet-100"
+                      class="flex w-full items-center justify-between rounded-md border border-slate-200 bg-white px-4 py-3 text-left text-sm text-slate-700 shadow-sm outline-none transition hover:border-violet-400 focus:border-violet-500 focus:ring-2 focus:ring-violet-100"
                       [attr.aria-expanded]="isStatusOpen"
                       aria-haspopup="listbox"
                     >
@@ -369,7 +369,7 @@
 
                     @if (isStatusOpen) {
                       <div
-                        class="absolute left-0 top-full z-50 mt-2 w-full overflow-hidden rounded-xl border border-slate-200 bg-white p-1 shadow-xl"
+                        class="absolute left-0 top-full z-50 mt-2 w-full overflow-hidden rounded-md border border-slate-200 bg-white p-1 shadow-xl"
                         role="listbox"
                         aria-label="User status"
                       >
@@ -379,7 +379,7 @@
                             role="option"
                             [attr.aria-selected]="userForm.status === status"
                             (click)="selectStatus(status)"
-                            class="flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm transition hover:bg-violet-50 hover:text-violet-700"
+                            class="flex w-full items-center justify-between rounded-md px-3 py-2.5 text-left text-sm transition hover:bg-violet-50 hover:text-violet-700"
                             [class.bg-violet-50]="userForm.status === status"
                             [class.text-violet-700]="userForm.status === status"
                           >
@@ -429,7 +429,7 @@
   </section>
 
   <!-- Data table -->
-  <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+  <div class="overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm">
     <div class="overflow-x-auto">
       <table class="w-full min-w-190 text-left text-sm">
         <thead class="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
